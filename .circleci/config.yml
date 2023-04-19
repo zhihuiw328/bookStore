@@ -1,12 +1,10 @@
 version: 2.1
 
-orbs:
-  openjdk: circleci/openjdk@1.3.0
-  gradle: circleci/gradle@1.1.0
+
 
 jobs:
-  builds:
-    working_directory: ~/circleci-python
+  build:
+    working_directory: ~/circleci-java
     docker:
       - image: "circleci/openjdk:8-jdk"
     steps:
@@ -15,5 +13,5 @@ jobs:
 
 workflows:
   build:
-    job:
+    jobs:
       - build
