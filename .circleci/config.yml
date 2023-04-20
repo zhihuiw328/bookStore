@@ -8,6 +8,7 @@ jobs:
     working_directory: ~/circleci-java
     docker:
       - image: circleci/openjdk:8-jdk
+
     steps:
       - checkout
       - run: chmod +x ./gradlew
@@ -15,8 +16,10 @@ jobs:
           key: gradle-dependencies-{{ checksum "build.grade" }}
 
       - run: ./gradlew dependencies
-
       - save_cache:
+          paths: 
+            - ~/.gradle/caches
+            - ~/.gradle/wrapper
           key: gradle-dependencies-{{ checksum "build.grade" }}
 
       - run: ./gradlew test
