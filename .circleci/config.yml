@@ -7,16 +7,22 @@ jobs:
   build:
     working_directory: ~/circleci-java
     docker:
-      - image: circleci/openjdk:8-jdk
+      - image: cimg/openjdk:8-jdk
     steps:
       - checkout
       - run: chmod +x ./gradlew
-      - run: ./gradlew clean
-      - run: ./gradlew build
+      - restore_cache:
+          key: gradle-dependencies-{{ checksum "build.grade" }}
+
+      - run: ./gradlew dependencies
+
+      - save_cache:
+          key: gradle-dependencies-{{ checksum "build.grade" }}
+
       - run: ./gradlew test
 
 workflows:
-  build_and_deploy:
+  test_and_deploy:
     jobs:
       - build
       - heroku/deploy-via-git:
