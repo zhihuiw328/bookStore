@@ -13,12 +13,12 @@ jobs:
       - run: chmod +x ./gradlew
       - run: ./gradlew build
   deploy:
-    docker:
-      - image: "circleci/python:3.7"
+    executor: heroku/default
     steps:
+      - checkout
       - heroku/deploy-via-git:
-          app-name: ${HEROKU_APP_NAME}
-
+          app-name: "book-demo-store"
+          branch: "master"
 
 workflows:
   build_and_deploy:
