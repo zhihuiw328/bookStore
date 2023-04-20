@@ -1,10 +1,13 @@
 version: 2.1
 
+orbs:
+  heroku: circleci/heroku@2.0
+
 jobs:
   build:
     working_directory: ~/circleci-java
     docker:
-      - image: "circleci/openjdk:8-jdk"
+      - image: circleci/openjdk:8-jdk
     steps:
       - checkout
       - run: chmod +x ./gradlew
@@ -12,21 +15,13 @@ jobs:
       - run: ./gradlew build
       - run: ./gradlew test
 
-  deploy:
-    docker:
-      - image: "circleci/python:3.7"
-    steps:
-      - attach_workspace:
-            at: /tmp/workspace
-      - checkout
-      - run: ./gradlew clean
-#      - run: sudo pip install heroku
-      - run: |
-          git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
 workflows:
   build_and_deploy:
     jobs:
       - build
-      - deploy:
+      - heroku/deploy-via-git:
           requires:
             - build
+          filters:
+            branches:
+              only: master
