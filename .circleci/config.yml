@@ -15,8 +15,10 @@ jobs:
           key: gradle-dependencies-{{ checksum "build.grade" }}
 
       - run: ./gradlew dependencies
-
       - save_cache:
+          paths: 
+            - ~/.gradle/caches
+            - ~/.gradle/wrapper
           key: gradle-dependencies-{{ checksum "build.grade" }}
 
       - run: ./gradlew test
